@@ -30,6 +30,17 @@ const currentImg = document.getElementById("currentSlide");
 const music1 = document.getElementById("bgMusic1");
 const music2 = document.getElementById("bgMusic2");
 
+document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+        // Browser minimized / tab switched / app switched
+        music1.pause();
+        music2.pause();
+    } else {
+        // আবার active হলে চালাতে চাইলে uncomment করো
+         if(currentIndex < totalImages) music1.play().catch(err => console.log(err));
+    }
+});
+
 // ======================
 // Slide Images
 // ======================
