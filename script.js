@@ -1,3 +1,9 @@
+let touchStartY = 0;
+let touchEndY = 0;
+const threshold = 100;
+
+
+
 // ======================
 // Floating Hearts
 // ======================
@@ -123,15 +129,18 @@ function showNextImage() {
 
   currentIndex++;
 
-  setTimeout(() => {
-    currentImg.style.transition = "transform 2s ease, opacity 2s ease, filter 2s ease";
-    currentImg.style.transform = `translate(${endCorner.x}, ${endCorner.y}) scale(${Math.random()*0.3+0.7}) rotate(${Math.random()*3-1.5}deg)`;
-    currentImg.style.opacity = 0;
-    currentImg.style.filter = "brightness(0.7) contrast(0.95) saturate(0.95)";
-    currentImg.classList.remove("glow");
-  }, 3000);
+// Slide-out (after slide-in + stay)
+setTimeout(() => {
+  currentImg.style.transition = "transform 1.5s ease, opacity 1.5s ease, filter 1.5s ease";
+  currentImg.style.transform = `translate(${endCorner.x}, ${endCorner.y}) scale(${Math.random()*0.3+0.7}) rotate(${Math.random()*3-1.5}deg)`;
+  currentImg.style.opacity = 0;
+  currentImg.style.filter = "brightness(0.7) contrast(0.95) saturate(0.95)";
+  currentImg.classList.remove("glow");
+}, 2500); // slide-in + short stay
 
-  setTimeout(showNextImage, 6000);
+// Call next image slightly after slide-out starts
+setTimeout(showNextImage, 3500); // slide-out overlap করে next image আসবে
+
 }
 
 
@@ -156,3 +165,20 @@ function createSparkle() {
   currentImg.parentElement.appendChild(sparkle);
   setTimeout(() => sparkle.remove(), 2000);
 }
+
+document.addEventListener('touchstart', (e) => {
+    touchStartY = e.touches[0].clientY;
+});
+
+document.addEventListener('touchmove', (e) => {
+    touchEndY = e.touches[0].clientY;
+});
+
+document.addEventListener('touchend', () => {
+    if (touchEndY - touchStartY > threshold) {
+        location.reload(); // পেজ refresh হবে
+    }
+    touchStartY = 0;
+    touchEndY = 0;
+});
+
